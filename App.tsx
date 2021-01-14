@@ -8,7 +8,7 @@
  * @format
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -35,7 +35,50 @@ import { Col, Row, Grid } from "react-native-easy-grid";
 
 declare const global: {HermesInternal: null | {}};
 
+
 const App = () => {
+
+  const [valorTela, setValorTela] = useState(0);
+  const [opcao, setOpcao] = useState("");
+  const [valorOperacao, setValorOperacao] = useState(0);
+  const digitos = 10;
+
+  function zerar(){
+    setValorTela(0);
+  }
+
+  function operacao(opcao: string){
+    if (opcao === "raiz") {
+      setValorTela(Math.sqrt(valorTela));
+      setOpcao("");
+      setValorOperacao(0);
+    } else {
+      setValorTela(0);
+      setOpcao(opcao);
+      setValorOperacao(valorTela);
+    }
+  }
+
+  function resultado(){
+
+    if(opcao === "adicionar"){
+      setValorTela( valorOperacao + valorTela )
+    }else if(opcao === "subtrar"){
+      setValorTela( valorOperacao - valorTela )
+    }else if(opcao === "dividir"){
+      setValorTela( valorOperacao / valorTela )
+    }else if(opcao === "multiplicar"){
+      setValorTela( valorOperacao * valorTela )
+    }
+    
+    setOpcao("");
+    setValorOperacao(0);
+  }
+
+  function digitar(numero: number){
+    setValorTela( numero + (valorTela * digitos));
+  }
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -46,169 +89,164 @@ const App = () => {
           <Header />
           <View style={styles.linhaInteira}>
             <TextInput
-              style={{ height: 56, borderColor: 'gray', borderWidth: 1, fontSize:28 }}
-              value={"Valor "}
+              style={{ height: 72, borderColor: 'gray', borderWidth: 1, fontSize:36, borderRadius: 12}}
+              placeholder={"Valor "}
+              value={valorTela+''}
             />
           </View>
           <Grid>
-              <Col style={{backgroundColor: '#789'}}>
-                <Text> Teste teste </Text>
-              </Col>
-              <Col style={{backgroundColor: '#456'}}>
-                <Text> Teste teste </Text>
-              </Col>
-          </Grid>
-          <Grid>
             <Row>
-              <Col style={{width: '75%'}}>
+              <Col style={{width: '80%'}}>
                 
                 {/* Botões superiores */}
                 <Row>
-                  <Col style={styles.botao_topo}>
-                    <Button
-                      title="Limpar"
-                      color="#6c757d"
-                      onPress={() => Alert.alert('Button with adjusted color pressed')}
-                    />
+                  <Col style={styles.botaoSuperiorLimpar}>
+                    <TouchableOpacity
+                      onPress={() => zerar()}
+                    >
+                      <Text style={{fontSize:34, color: '#fff'}}>Limpar</Text>
+                    </TouchableOpacity>
                   </Col>
-                  <Col style={styles.botao_topo}>
-                    <Button
-                      title="Resultado"
-                      color="#2abf4a"
-                      onPress={() => Alert.alert('Button with adjusted color pressed')}
-                    />
+                  <Col style={styles.botaoSuperiorResultado}>
+                    <TouchableOpacity
+                      onPress={() => resultado()}
+                      >
+                      <Text style={{fontSize:34, color: '#fff'}}>Resultado</Text>
+                    </TouchableOpacity>
                   </Col>
                 </Row>
 
                 {/* Botões numericos */}
                 <Row>
                   <Col style={styles.botao}>
-                    <TouchableOpacity style={styles.botao}>
-                      <Text style={{fontSize:36, color: '#fff'}}> 1 </Text>
+                    <TouchableOpacity style={styles.botao}
+                      onPress={() => digitar(1)}
+                    >
+                      <Text style={{fontSize:34, color: '#fff'}}> 1 </Text>
                     </TouchableOpacity>
                   </Col>
                   <Col style={styles.botao}>
-                    <TouchableOpacity style={styles.botao}>
-                      <Text style={{fontSize:36, color: '#fff'}}> 2 </Text>
+                    <TouchableOpacity style={styles.botao}
+                      onPress={() => digitar(2)}
+                    >
+                      <Text style={{fontSize:34, color: '#fff'}}> 2 </Text>
                     </TouchableOpacity>
                   </Col>
                   <Col style={styles.botao}>
-                    <TouchableOpacity style={styles.botao}>
-                      <Text style={{fontSize:36, color: '#fff'}}> 3 </Text>
-                    </TouchableOpacity>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col style={styles.botao}>
-                    <TouchableOpacity style={styles.botao}>
-                      <Text style={{fontSize:36, color: '#fff'}}> 4 </Text>
-                    </TouchableOpacity>
-                  </Col>
-                  <Col style={styles.botao}>
-                    <TouchableOpacity style={styles.botao}>
-                      <Text style={{fontSize:36, color: '#fff'}}> 5 </Text>
-                    </TouchableOpacity>
-                  </Col>
-                  <Col style={styles.botao}>
-                    <TouchableOpacity style={styles.botao}>
-                      <Text style={{fontSize:36, color: '#fff'}}> 6 </Text>
+                    <TouchableOpacity style={styles.botao}
+                      onPress={() => digitar(3)}
+                    >
+                      <Text style={{fontSize:34, color: '#fff'}}> 3 </Text>
                     </TouchableOpacity>
                   </Col>
                 </Row>
                 <Row>
                   <Col style={styles.botao}>
-                    <TouchableOpacity style={styles.botao}>
-                      <Text style={{fontSize:36, color: '#fff'}}> 7 </Text>
+                    <TouchableOpacity style={styles.botao}
+                      onPress={() => digitar(4)}
+                    >
+                      <Text style={{fontSize:34, color: '#fff'}}> 4 </Text>
                     </TouchableOpacity>
                   </Col>
                   <Col style={styles.botao}>
-                    <TouchableOpacity style={styles.botao}>
-                      <Text style={{fontSize:36, color: '#fff'}}> 8 </Text>
+                    <TouchableOpacity style={styles.botao}
+                      onPress={() => digitar(5)}
+                    >
+                      <Text style={{fontSize:34, color: '#fff'}}> 5 </Text>
                     </TouchableOpacity>
                   </Col>
                   <Col style={styles.botao}>
-                    <TouchableOpacity style={styles.botao}>
-                      <Text style={{fontSize:36, color: '#fff'}}> 9 </Text>
+                    <TouchableOpacity style={styles.botao}
+                      onPress={() => digitar(6)}
+                    >
+                      <Text style={{fontSize:34, color: '#fff'}}> 6 </Text>
                     </TouchableOpacity>
                   </Col>
                 </Row>
                 <Row>
                   <Col style={styles.botao}>
-                    <TouchableOpacity style={styles.botao}>
-                      <Text style={{fontSize:36, color: '#fff'}}> 0 </Text>
+                    <TouchableOpacity style={styles.botao}
+                      onPress={() => digitar(7)}
+                    >
+                      <Text style={{fontSize:34, color: '#fff'}}> 7 </Text>
+                    </TouchableOpacity>
+                  </Col>
+                  <Col style={styles.botao}>
+                    <TouchableOpacity style={styles.botao}
+                      onPress={() => digitar(8)}
+                    >
+                      <Text style={{fontSize:34, color: '#fff'}}> 8 </Text>
+                    </TouchableOpacity>
+                  </Col>
+                  <Col style={styles.botao}>
+                    <TouchableOpacity style={styles.botao}
+                      onPress={() => digitar(9)}
+                    >
+                      <Text style={{fontSize:34, color: '#fff'}}> 9 </Text>
+                    </TouchableOpacity>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col style={styles.botao}>
+                    <TouchableOpacity style={styles.botao}
+                      onPress={() => digitar(0)}
+                    >
+                      <Text style={{fontSize:34, color: '#fff'}}> 0 </Text>
                     </TouchableOpacity>
                   </Col>
                 </Row>
               </Col>
 
               {/* Botões laterais */}
-              <Col style={{width: '25%'}}>
+              <Col style={{width: '20%'}}>
                 <Row>
-                  <Col style={styles.botao_lateral}>
-                    <Button
-                      title="/"
-                      color="#3366f4"
-                      onPress={() => Alert.alert('Button with adjusted color pressed')}
-                    />
+                  <Col style={styles.botaoLateral}>
+                    <TouchableOpacity style={styles.botaoLateral}
+                      onPress={() => operacao("dividir")}
+                    >
+                      <Text style={{fontSize:34, color: '#fff'}}> / </Text>
+                    </TouchableOpacity>
                   </Col>
                 </Row>
                 <Row>
-                  <Col style={styles.botao_lateral}>
-                    <Button
-                      title="X"
-                      color="#3366f4"
-                      onPress={() => Alert.alert('Button with adjusted color pressed')}
-                    />
+                  <Col style={styles.botaoLateral}>
+                    <TouchableOpacity style={styles.botaoLateral}
+                      onPress={() => operacao("multiplicar")}
+                    >
+                      <Text style={{fontSize:34, color: '#fff'}}> X </Text>
+                    </TouchableOpacity>
                   </Col>
                 </Row>
                 <Row>
-                  <Col style={styles.botao_lateral}>
-                    <Button
-                      title="-"
-                      color="#3366f4"
-                      onPress={() => Alert.alert('Button with adjusted color pressed')}
-                    />
+                  <Col style={styles.botaoLateral}>
+                    <TouchableOpacity style={styles.botaoLateral}
+                      onPress={() => operacao("subtrar")}
+                    >
+                      <Text style={{fontSize:34, color: '#fff'}}> - </Text>
+                    </TouchableOpacity>
                   </Col>
                 </Row>
                 <Row>
-                  <Col style={styles.botao_lateral}>
-                    <Button
-                      title="+"
-                      color="#3366f4"
-                      onPress={() => Alert.alert('Button with adjusted color pressed')}
-                    />
+                  <Col style={styles.botaoLateral}>
+                    <TouchableOpacity style={styles.botaoLateral}
+                      onPress={() => operacao("adicionar")}
+                    >
+                      <Text style={{fontSize:34, color: '#fff'}}> + </Text>
+                    </TouchableOpacity>
                   </Col>
                 </Row>
                 <Row>
-                  <Col style={styles.botao_lateral}>
-                    <Button
-                      title="&radic;"
-                      color="#3366f4"
-                      onPress={() => Alert.alert('Button with adjusted color pressed')}
-                    />
+                  <Col style={styles.botaoLateral}>
+                    <TouchableOpacity style={styles.botaoLateral}
+                      onPress={() => operacao("raiz")}
+                    >
+                      <Text style={{fontSize:34, color: '#fff'}}> &radic; </Text>
+                    </TouchableOpacity>
                   </Col>
                 </Row>
               </Col>
             </Row>
-
-
-            <Row size={1}>
-              <View >
-                <Text>Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste </Text>
-              </View>
-            </Row>
           </Grid>
-          
-        <View style={styles.btnContainer}>
-          <TouchableOpacity>
-          <Button
-            title="+"
-            color="#3366f4"
-            onPress={() => Alert.alert('Button with adjusted color pressed')}>
-          <Text>Change Address</Text>
-          </Button>
-            </TouchableOpacity>          
-          </View> 
         </ScrollView>
       </SafeAreaView>
     </>
@@ -225,22 +263,39 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   linhaInteira: {
-    padding: 10,
+    padding: 5,
     width: '100%',
   },
-  botao_topo: {
-    padding: 5,
-  },
-  botao_lateral: {
-    padding: 5,
-    fontSize: 56,
-  },
   botao: {
-    borderRadius: 25,
+    borderRadius: 12,
     margin: 5,
-    padding: 5,
+    padding: 3,
     alignItems: 'center',
     backgroundColor: '#007bff'
+  },
+  botaoLateral: {
+    borderRadius: 12,
+    margin: 5,
+    padding: 3,
+    alignItems: 'center',
+    backgroundColor: '#3366f4'
+  },
+  botaoSuperiorLimpar: {
+    borderRadius: 12,
+    margin: 5,
+    paddingHorizontal: 3,
+    paddingVertical: 12,
+    alignItems: 'center',
+    backgroundColor: '#6c757d',
+    width: '40%'
+  },
+  botaoSuperiorResultado: {
+    borderRadius: 12,
+    margin: 5,
+    paddingHorizontal: 3,
+    paddingVertical: 12,
+    alignItems: 'center',
+    backgroundColor: '#2abf4a'
   },
   scrollView: {
     backgroundColor: Colors.lighter,
