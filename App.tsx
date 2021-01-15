@@ -39,36 +39,57 @@ declare const global: {HermesInternal: null | {}};
 const App = () => {
 
   const [valorTela, setValorTela] = useState(0);
+  const [tela, setTela] = useState("0");
   const [opcao, setOpcao] = useState("");
   const [valorOperacao, setValorOperacao] = useState(0);
   const digitos = 10;
 
   function zerar(){
     setValorTela(0);
+    setTela('0');
+  }
+
+  function pontuacao(){
+    if (valorTela == 0) {
+      setValorTela(0.0);
+    } else {
+      setValorTela(valorTela + 0.0);
+    }
+    
+    if (tela.indexOf('.') > -1) {
+      setTela(tela);
+    } else {
+      setTela(tela + '.');
+    }
   }
 
   function operacao(opcao: string){
     if (opcao === "raiz") {
       setValorTela(Math.sqrt(valorTela));
+      setTela(Math.sqrt(valorTela) + '');
       setOpcao("");
       setValorOperacao(0);
     } else {
       setValorTela(0);
+      setTela('0');
       setOpcao(opcao);
       setValorOperacao(valorTela);
     }
   }
 
   function resultado(){
-
     if(opcao === "adicionar"){
       setValorTela( valorOperacao + valorTela )
+      setTela((valorOperacao + valorTela) + '');
     }else if(opcao === "subtrar"){
       setValorTela( valorOperacao - valorTela )
+      setTela((valorOperacao - valorTela) + '');
     }else if(opcao === "dividir"){
       setValorTela( valorOperacao / valorTela )
+      setTela((valorOperacao / valorTela) + '');
     }else if(opcao === "multiplicar"){
       setValorTela( valorOperacao * valorTela )
+      setTela((valorOperacao * valorTela) + '');
     }
     
     setOpcao("");
@@ -76,8 +97,17 @@ const App = () => {
   }
 
   function digitar(numero: number){
-    setValorTela( numero + (valorTela * digitos));
+
+    if (tela.indexOf('0.') > -1 && valorTela > 0 ) {
+      setValorTela( numero / digitos );
+      setTela(( numero / digitos ) + '');
+    } else {
+      setValorTela( numero + (valorTela * digitos) );
+      setTela(( numero + (valorTela * digitos ) ) + '');
+    }
   }
+
+  
 
   return (
     <>
@@ -86,12 +116,21 @@ const App = () => {
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
-          <Header />
+          {/* <Header /> */}
           <View style={styles.linhaInteira}>
             <TextInput
-              style={{ height: 72, borderColor: 'gray', borderWidth: 1, fontSize:36, borderRadius: 12}}
+              style={{
+                height: 72,
+                borderColor: 'gray',
+                borderWidth: 1,
+                fontSize:36,
+                borderRadius: 12,
+                marginTop: '40%',
+                color: "#000"
+              }}
               placeholder={"Valor "}
-              value={valorTela+''}
+              editable={false}
+              value={tela}
             />
           </View>
           <Grid>
@@ -187,11 +226,18 @@ const App = () => {
                   </Col>
                 </Row>
                 <Row>
-                  <Col style={styles.botao}>
+                  <Col size={2} style={styles.botao}>
                     <TouchableOpacity style={styles.botao}
                       onPress={() => digitar(0)}
                     >
                       <Text style={{fontSize:34, color: '#fff'}}> 0 </Text>
+                    </TouchableOpacity>
+                  </Col>
+                  <Col size={1} style={styles.botaoLateral}>
+                    <TouchableOpacity style={styles.botaoLateral}
+                      onPress={() => pontuacao()}
+                    > 
+                      <Text style={{fontSize:34, color: '#fff'}}> , </Text>
                     </TouchableOpacity>
                   </Col>
                 </Row>
@@ -306,8 +352,13 @@ const styles = StyleSheet.create({
   },
   body: {
     backgroundColor: Colors.white,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
-
+  Centralizar:{
+    alignItems: 'center',
+  },
   btnContainer:{
     flexDirection:"row",
     justifyContent:"space-between"
